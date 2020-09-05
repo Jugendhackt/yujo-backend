@@ -8,7 +8,7 @@ import (
 )
 
 type Game struct {
-	ID      string `sql:"primary_key;defautl:uuid_generate_v4()" json:"id"`
+	ID      string `gorm:"uniqueIndex" sql:"primary_key;defautl:uuid_generate_v4()" json:"id"`
 	GamePin uint64 `json:"game-pin"`
 }
 

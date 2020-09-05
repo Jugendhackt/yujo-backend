@@ -13,7 +13,15 @@ import (
 var pinRandomMax = big.NewInt(999999 - 100000)
 
 func CreateGameRoute(context *gin.Context) {
-	randomPin, _ := rand.Int(rand.Reader, pinRandomMax)
+	valid := false
+	var randomPin *big.Int
+	for !valid {
+		randomPin, _ = rand.Int(rand.Reader, pinRandomMax)
+		if config.DB.Where(&models.Game{GamePin: randomPin.Uint64()}) == nil {
+			valid = true
+		}
+	}
+
 	game := models.Game{
 		GamePin: randomPin.Uint64(),
 	}
