@@ -22,8 +22,12 @@ func CreateGameRoute(context *gin.Context) {
 		}
 	}
 
+	var payload models.CreateUser
+	context.BindJSON(&payload)
+
 	game := models.Game{
-		GamePin: randomPin.Uint64(),
+		GamePin:     randomPin.Uint64(),
+		CreatorName: payload.Name,
 	}
 	config.DB.Create(&game)
 	if config.DB.Error != nil {
