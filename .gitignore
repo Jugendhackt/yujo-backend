@@ -32,3 +32,5 @@
 /Godeps/
 
 # End of https://www.toptal.com/developers/gitignore/api/go,code
+
+db.sqlite
