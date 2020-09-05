@@ -23,7 +23,7 @@ func main() {
 
 	//defer config.DB.Close()
 
-	config.DB.AutoMigrate(&models.Game{})
+	config.DB.AutoMigrate(&models.Game{}, &models.Creator{}, &models.TeamMate{}, &models.Enemy{})
 
 	r := router.CreateRouter()
 	r.Run(":8080")

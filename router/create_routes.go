@@ -8,6 +8,7 @@ import (
 	"strconv"
 
 	"github.com/Jugendhackt/yujo-backend/config"
+	jsonmodels "github.com/Jugendhackt/yujo-backend/json-models"
 	"github.com/Jugendhackt/yujo-backend/models"
 	"github.com/gin-gonic/gin"
 )
@@ -30,9 +31,13 @@ func CreateGameRoute(context *gin.Context) {
 		log.Println("Binding failed:", err)
 	}
 
+	creator := models.Creator{
+		Name: payload.Name,
+	}
+
 	game := models.Game{
-		GamePin:     randomPin.Uint64(),
-		CreatorName: payload.Name,
+		GamePin: randomPin.Uint64(),
+		Creator: creator,
 	}
 	config.DB.Create(&game)
 	if config.DB.Error != nil {
@@ -40,7 +45,12 @@ func CreateGameRoute(context *gin.Context) {
 		return
 	}
 
-	context.JSON(http.StatusOK, game)
+	response := jsonmodels.CreateGame{
+		ID:      game.ID,
+		GamePin: game.GamePin,
+	}
+
+	context.JSON(http.StatusOK, response)
 }
 
 func JoinGameRoute(context *gin.Context) {
@@ -63,7 +73,11 @@ func JoinGameRoute(context *gin.Context) {
 
 	game := games[0]
 
-	game.TeamMateName = payload.Name
+	teammate := models.TeamMate{
+		Name: payload.Name,
+	}
+	game.TeamMate = teammate
+	game.TeamMateJoined = true
 
 	config.DB.Save(&game)
 
@@ -72,5 +86,10 @@ func JoinGameRoute(context *gin.Context) {
 		return
 	}
 
-	context.JSON(http.StatusOK, game)
+	response := jsonmodels.CreateGame{
+		ID:      game.ID,
+		GamePin: game.GamePin,
+	}
+
+	context.JSON(http.StatusOK, response)
 }

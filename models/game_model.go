@@ -8,10 +8,12 @@ import (
 )
 
 type Game struct {
-	ID           string `gorm:"uniqueIndex" sql:"primary_key;defautl:uuid_generate_v4()" json:"id"`
-	GamePin      uint64 `json:"gamePin"`
-	CreatorName  string `json:"creatorName"`
-	TeamMateName string `json:"teammateName"`
+	ID             string `gorm:"uniqueIndex" sql:"primary_key;defautl:uuid_generate_v4()"`
+	GamePin        uint64
+	Creator        Creator
+	TeamMate       TeamMate
+	TeamMateJoined bool
+	Enemy          Enemy
 }
 
 func (game *Game) BeforeCreate(tx *gorm.DB) (err error) {

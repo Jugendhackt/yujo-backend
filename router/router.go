@@ -10,8 +10,10 @@ func CreateRouter() *gin.Engine {
 	router.Use(cors.New(cors.Config{
 		AllowOrigins: []string{"*"},
 	}))
+
 	router.POST("/create", CreateGameRoute)
 	router.POST("/join/:gamePin", JoinGameRoute)
+	router.GET("/game/:uuid", GetGameInfoRoute)
 
 	return router
 }
