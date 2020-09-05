@@ -2,6 +2,7 @@ package router
 
 import (
 	"crypto/rand"
+	"log"
 	"math/big"
 	"net/http"
 
@@ -17,13 +18,16 @@ func CreateGameRoute(context *gin.Context) {
 	var randomPin *big.Int
 	for !valid {
 		randomPin, _ = rand.Int(rand.Reader, pinRandomMax)
-		if config.DB.Where(&models.Game{GamePin: randomPin.Uint64()}) == nil {
+		existing := config.DB.Where(&models.Game{GamePin: randomPin.Uint64()})
+		if existing.RowsAffected == 0 {
 			valid = true
 		}
 	}
 
 	var payload models.CreateUser
-	context.BindJSON(&payload)
+	if err := context.BindJSON(&payload); err != nil {
+		log.Println("Binding failed:", err)
+	}
 
 	game := models.Game{
 		GamePin:     randomPin.Uint64(),
