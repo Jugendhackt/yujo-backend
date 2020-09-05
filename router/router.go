@@ -14,6 +14,7 @@ func CreateRouter() *gin.Engine {
 	router.POST("/create", CreateGameRoute)
 	router.POST("/join/:gamePin", JoinGameRoute)
 	router.GET("/game/:uuid", GetGameInfoRoute)
+	router.GET("/game/:uuid/round/:id", GetQuestionRoute)
 
 	return router
 }
