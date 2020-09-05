@@ -7,4 +7,5 @@ type Round struct {
 	GameBaseID int64
 	GameID     string
 	QuestionID uint
+	Answers    []Answer
 }

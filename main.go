@@ -30,6 +30,7 @@ func main() {
 		&models.Enemy{},
 		&models.Round{},
 		&models.Question{},
+		&models.Answer{},
 	)
 
 	ReadQuestionsFromFile("frontend/ressourcen/fragen.md")

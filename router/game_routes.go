@@ -50,7 +50,7 @@ func GetQuestionRoute(context *gin.Context) {
 	config.DB.Where("id = ? AND game_id = ?", roundID, uuid).First(&round)
 
 	var question models.Question
-	if round == (models.Round{}) {
+	if round.ID == 0 {
 		// TODO: Generate new Round here
 		var count int64
 		config.DB.Table("questions").Count(&count)
@@ -71,4 +71,28 @@ func GetQuestionRoute(context *gin.Context) {
 	}
 
 	context.JSON(http.StatusOK, response)
+}
+
+func SendAnswerRoute(context *gin.Context) {
+	uuid := context.Param("uuid")
+	roundID, err := strconv.ParseInt(context.Param("id"), 10, 0)
+	if err != nil {
+		context.AbortWithError(http.StatusInternalServerError, err)
+		return
+	}
+
+	var round models.Round
+	config.DB.Where(models.Round{GameID: uuid, GameBaseID: roundID}).First(&round)
+
+	var payload jsonmodels.Answer
+	if err := context.BindJSON(&payload); err != nil {
+		context.AbortWithError(http.StatusInternalServerError, err)
+		return
+	}
+
+	answer := models.Answer{
+		User: payload.Answer,
+	}
+	round.Answers = append(round.Answers, answer)
+	config.DB.Save(&round)
 }
