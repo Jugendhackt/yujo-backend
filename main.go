@@ -23,7 +23,16 @@ func main() {
 
 	//defer config.DB.Close()
 
-	config.DB.AutoMigrate(&models.Game{}, &models.Creator{}, &models.TeamMate{}, &models.Enemy{})
+	config.DB.AutoMigrate(
+		&models.Game{},
+		&models.Creator{},
+		&models.TeamMate{},
+		&models.Enemy{},
+		&models.Round{},
+		&models.Question{},
+	)
+
+	ReadQuestionsFromFile("frontend/ressourcen/fragen.md")
 
 	r := router.CreateRouter()
 	r.Run(":8080")
