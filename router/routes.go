@@ -26,6 +26,10 @@ func CreateGameRoute(context *gin.Context) {
 		GamePin: randomPin.Uint64(),
 	}
 	config.DB.Create(&game)
+	if config.DB.Error != nil {
+		context.AbortWithError(http.StatusInternalServerError, config.DB.Error)
+		return
+	}
 
 	context.JSON(http.StatusOK, game)
 }
