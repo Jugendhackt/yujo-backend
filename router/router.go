@@ -11,7 +11,7 @@ func CreateRouter() *gin.Engine {
 		AllowOrigins: []string{"*"},
 	}))
 	router.POST("/create", CreateGameRoute)
-	router.POST("/join/:gamePin")
+	router.POST("/join/:gamePin", JoinGameRoute)
 
 	return router
 }
