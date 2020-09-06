@@ -16,7 +16,7 @@ func GetGameInfoRoute(context *gin.Context) {
 	uuid := context.Param("uuid")
 
 	var game models.Game
-	config.DB.Where(&models.Game{ID: uuid}).Joins("Creator").Joins("TeamMate").First(&game)
+	config.DB.Where(&models.Game{ID: uuid}).Joins("Creator").Joins("TeamMate").Joins("Enemy").First(&game)
 
 	if game.TeamMateJoined != true {
 		context.AbortWithStatus(http.StatusConflict)
