@@ -96,3 +96,25 @@ func SendAnswerRoute(context *gin.Context) {
 	round.Answers = append(round.Answers, answer)
 	config.DB.Save(&round)
 }
+
+func GetFightResult(context *gin.Context) {
+	uuid := context.Param("uuid")
+	roundID, err := strconv.ParseInt(context.Param("id"), 10, 0)
+	if err != nil {
+		context.AbortWithError(http.StatusInternalServerError, err)
+		return
+	}
+
+	var round models.Round
+	config.DB.Joins("Answers").Where(models.Round{GameID: uuid, GameBaseID: roundID}).First(&round)
+
+	if len(round.Answers) < 2 {
+		context.AbortWithStatus(http.StatusConflict)
+		return
+	}
+
+	if round.Answers[0] == round.Answers[1] {
+		// TODO: Enemy und Spielern Leben abziehen
+	}
+	// TODO: Nur spielern abziehen
+}

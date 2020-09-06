@@ -18,6 +18,7 @@ func CreateRouter() *gin.Engine {
 
 	router.GET("/game/:uuid/round/:id", GetQuestionRoute)
 	router.POST("/game/:uuid/round/:id", SendAnswerRoute)
+	router.GET("/game/:uuid/round/:id/result", GetFightResult)
 
 	router.GET("/", func(c *gin.Context) {
 		c.FileFromFS("/app.html", pkger.Dir("/frontend"))
