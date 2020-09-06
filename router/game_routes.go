@@ -113,8 +113,33 @@ func GetFightResult(context *gin.Context) {
 		return
 	}
 
+	var game models.Game
+	config.DB.Joins("Enemy").Joins("Creator").Joins("TeamMate").Where(models.Game{ID: round.GameID}).First(&game)
+
 	if round.Answers[0] == round.Answers[1] {
-		// TODO: Enemy und Spielern Leben abziehen
+		game.Enemy.Healthpoints = game.Enemy.Healthpoints - 10
+		game.Creator.Healthpoints = game.Creator.Healthpoints - 5
+		game.TeamMate.Healthpoints = game.TeamMate.Healthpoints - 5
+	} else {
+		game.Creator.Healthpoints = game.Creator.Healthpoints - 10
+		game.TeamMate.Healthpoints = game.TeamMate.Healthpoints - 10
 	}
-	// TODO: Nur spielern abziehen
+
+	config.DB.Save(&game)
+
+	response := jsonmodels.GameInfo{
+		Names: jsonmodels.PlayerNames{
+			CreatorName:  game.Creator.Name,
+			TeamMateName: game.TeamMate.Name,
+		},
+		HealthPoints: jsonmodels.HealthPoints{
+			Creator:  game.Creator.Healthpoints,
+			TeamMate: game.TeamMate.Healthpoints,
+			Enemy:    game.Enemy.Healthpoints,
+		},
+		CorrectAnswer: round.Answers[0] == round.Answers[1],
+		NextRoundID:   int(round.GameBaseID + 1),
+	}
+
+	context.JSON(http.StatusOK, response)
 }

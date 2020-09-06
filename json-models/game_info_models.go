@@ -12,6 +12,8 @@ type HealthPoints struct {
 }
 
 type GameInfo struct {
-	Names        PlayerNames `json:"names"`
-	HealthPoints HealthPoints
+	Names         PlayerNames `json:"names"`
+	HealthPoints  HealthPoints
+	CorrectAnswer bool `json:"correctAnswer"`
+	NextRoundID   int  `json:"nextRoundID"`
 }

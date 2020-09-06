@@ -38,6 +38,7 @@ func CreateGameRoute(context *gin.Context) {
 	game := models.Game{
 		GamePin: randomPin.Uint64(),
 		Creator: creator,
+		Enemy:   models.Enemy{},
 	}
 	config.DB.Create(&game)
 	if config.DB.Error != nil {
