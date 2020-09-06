@@ -128,6 +128,12 @@ func GetFightResult(context *gin.Context) {
 
 	config.DB.Save(&game)
 
+	var nextRoundID int
+	if (game.Creator.Healthpoints <= 0) || (game.TeamMate.Healthpoints <= 0) || (game.Enemy.Healthpoints <= 0) {
+		nextRoundID = -1
+	} else {
+		nextRoundID = int(round.GameBaseID + 1)
+	}
 	response := jsonmodels.GameInfo{
 		Names: jsonmodels.PlayerNames{
 			CreatorName:  game.Creator.Name,
@@ -139,7 +145,7 @@ func GetFightResult(context *gin.Context) {
 			Enemy:    game.Enemy.Healthpoints,
 		},
 		CorrectAnswer: round.Answers[0] == round.Answers[1],
-		NextRoundID:   int(round.GameBaseID + 1),
+		NextRoundID:   nextRoundID,
 	}
 
 	context.JSON(http.StatusOK, response)
