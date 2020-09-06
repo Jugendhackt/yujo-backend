@@ -33,6 +33,7 @@ func GetGameInfoRoute(context *gin.Context) {
 			TeamMate: game.TeamMate.Healthpoints,
 			Enemy:    game.Enemy.Healthpoints,
 		},
+		NextRoundID: 0,
 	}
 
 	context.JSON(http.StatusOK, response)
