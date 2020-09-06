@@ -48,7 +48,7 @@ func GetQuestionRoute(context *gin.Context) {
 	}
 
 	var round models.Round
-	config.DB.Where("id = ? AND game_id = ?", roundID, uuid).First(&round)
+	config.DB.Where("game_base_id = ? AND game_id = ?", roundID, uuid).First(&round)
 
 	var question models.Question
 	if round.ID == 0 {
