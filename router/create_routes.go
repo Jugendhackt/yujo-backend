@@ -32,13 +32,16 @@ func CreateGameRoute(context *gin.Context) {
 	}
 
 	creator := models.Creator{
-		Name: payload.Name,
+		Name:         payload.Name,
+		Healthpoints: 30,
 	}
 
 	game := models.Game{
 		GamePin: randomPin.Uint64(),
 		Creator: creator,
-		Enemy:   models.Enemy{},
+		Enemy: models.Enemy{
+			Healthpoints: 50,
+		},
 	}
 	config.DB.Create(&game)
 	if config.DB.Error != nil {
@@ -75,7 +78,8 @@ func JoinGameRoute(context *gin.Context) {
 	game := games[0]
 
 	teammate := models.TeamMate{
-		Name: payload.Name,
+		Name:         payload.Name,
+		Healthpoints: 30,
 	}
 	game.TeamMate = teammate
 	game.TeamMateJoined = true
