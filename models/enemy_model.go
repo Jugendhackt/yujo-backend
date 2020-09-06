@@ -4,6 +4,6 @@ import "gorm.io/gorm"
 
 type Enemy struct {
 	gorm.Model
-	Healthpoints int
+	Healthpoints int `gorm:"default=50"`
 	GameID       string
 }
