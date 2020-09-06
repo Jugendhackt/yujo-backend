@@ -35,3 +35,4 @@
 
 db.sqlite
 yujo-backend
+pkged.go
